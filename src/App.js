@@ -1,5 +1,6 @@
 import './App.css';
 import { useState, useEffect } from 'react';
+import Timer from './components/Timer/Timer';
 
 function App() {
     const [time, setTime] = useState(0);
@@ -7,13 +8,14 @@ function App() {
     const [intervalId, setIntervalId] = useState(null);
 
     useEffect(() => {
+
       if(isRunning) {
         const id = setInterval(() => {
           setTime(prevTime => prevTime + 1);
         }, 1000);
         setIntervalId(id);
 
-        return () => clearInterval(id)
+        return () => {if(isRunning) clearInterval(id)}
       } else {
         if(intervalId) {
           clearInterval(intervalId);
@@ -41,9 +43,7 @@ function App() {
         <button onClick={handleStart}>Start</button>
         <button onClick={handleStop}>Stop</button>
         <button onClick={handleClear}>Clear</button>
-        <div className="timer-display">
-            <h1>{time}s</h1>
-        </div>
+        <Timer time={time} />
       </div>
     );
 
